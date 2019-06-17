@@ -3,13 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ColourMap : MonoBehaviour {
-    public GameObject map;
+    GameObject[] players;
+    Color[] playerColors;
     Mesh mapMesh;
-	// Use this for initialization
-	void Start () {
-        mapMesh = map.GetComponentInChildren<MeshFilter>().mesh;
-        
-        Vector3[] vertices = mapMesh.vertices;
+    Vector3[] vertices;
+    //vertColors has the same size as vertices. colors map onto verts by index.
+    Color[] vertColors;
+    // Use this for initialization
+    void Start () {
+        mapMesh = gameObject.GetComponent<MeshFilter>().mesh;
+        players = Camera.main.GetComponent<CameraController>().targets;
+        playerColors = new Color[players.Length];
+        for (int i=0;i<players.Length;i++) {
+            playerColors[i] = players[i].GetComponent<MeshRenderer>().materials[0].color;
+        }
+        vertices = mapMesh.vertices;
+        vertColors = new Color[vertices.Length];
+        //set the default color of the map
+        for (int i=0;i<vertColors.Length;i++) {
+            vertColors[i] = Color.clear;
+        }
+        mapMesh.colors = vertColors;
         /*
         // create new colors array where the colors will be created.
         Color[] colors = new Color[vertices.Length];
@@ -24,8 +38,9 @@ public class ColourMap : MonoBehaviour {
         float min = 1024;
         for (int i = 0; i < vertices.Length; i++) {
             //vertices[i] is in model space. so it must be converted to world space
-            Vector3 worldSpaceVertPos = map.transform.TransformPoint(vertices[i]);
-            float mag = (gameObject.transform.position - worldSpaceVertPos).magnitude;
+            Vector3 worldSpaceVertPos = gameObject.transform.TransformPoint(vertices[i]);
+            float mag = (players[0].transform.position - worldSpaceVertPos).magnitude;
+            //float mag = worldSpaceVertPos.x;
             if (mag > max) max = mag;
             if (mag < min) min = mag;
         }
@@ -36,25 +51,19 @@ public class ColourMap : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        Vector3[] vertices = mapMesh.vertices;
-
-        // create new colors array where the colors will be created.
-        Color[] colors = mapMesh.colors;
-        float maxDist = 0;
-        float minDist = 1024;
-        Debug.Log("colors.Length: "+ colors.Length);
-        for (int i=0;i<colors.Length;i++) {
-            Vector3 worldSpaceVertPos = map.transform.TransformPoint(vertices[i]);
-            float distanceFromPlayer = (worldSpaceVertPos - gameObject.transform.position).magnitude;
-            colors[i] = Color.red;
-            if (distanceFromPlayer<10) {
-                colors[i] = Color.red;
-                Debug.Log("new color");
+        vertices = mapMesh.vertices;
+        //for each of vertices in the mesh
+        for (int i=0;i<vertices.Length;i++) {
+            //check if any of the players are within a distance
+            for (int j=0;j<players.Length;j++) {
+                //the distance between vertice i, and player j
+                float distance = (players[j].transform.position - gameObject.transform.TransformPoint(vertices[i])).magnitude;
+                if (distance<0.75f) {
+                    vertColors[i] = playerColors[j];
+                }
             }
         }
-        //Debug.Log("Max: " + maxDist);
-        //Debug.Log("Min: " + minDist);
-        mapMesh.colors = colors;
+        mapMesh.colors = vertColors;
 
     }
 }
