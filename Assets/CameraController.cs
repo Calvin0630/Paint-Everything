@@ -29,11 +29,9 @@ public class CameraController : MonoBehaviour {
                 farthestPlayerIndex = i;
             }
         }
-        Debug.Log("Player: " + (farthestPlayerIndex + 1) + " is the farthest from the average");
-        //the angle formed by (farthestPlayerPos-targetAverage) and offset
-        //the angle formed by targetAverage->farthestPlayerPos and the cameraOffset
-        float theta = Mathf.Acos(Vector3.Dot((farthestPlayerPos - targetAverage), offset) / ((farthestPlayerPos - targetAverage).magnitude * offset.magnitude));
-        Debug.Log("theta: " + theta);
+        //Debug.Log("Player: " + (farthestPlayerIndex + 1) + " is the farthest from the average");
+        cameraDist = Mathf.Max(10, farthestPlayerDist * 2);
+
         transform.position = targetAverage + offset*cameraDist;
         transform.LookAt(targetAverage);
     }
