@@ -23,7 +23,9 @@ public class ColourMap : MonoBehaviour {
         float max = 0;
         float min = 1024;
         for (int i = 0; i < vertices.Length; i++) {
-            float mag = (gameObject.transform.position - vertices[i]).magnitude;
+            //vertices[i] is in model space. so it must be converted to world space
+            Vector3 worldSpaceVertPos = map.transform.TransformPoint(vertices[i]);
+            float mag = (gameObject.transform.position - worldSpaceVertPos).magnitude;
             if (mag > max) max = mag;
             if (mag < min) min = mag;
         }
@@ -40,10 +42,12 @@ public class ColourMap : MonoBehaviour {
         Color[] colors = mapMesh.colors;
         float maxDist = 0;
         float minDist = 1024;
+        Debug.Log("colors.Length: "+ colors.Length);
         for (int i=0;i<colors.Length;i++) {
-            float distanceFromPlayer = (vertices[i] - gameObject.transform.position).magnitude;
+            Vector3 worldSpaceVertPos = map.transform.TransformPoint(vertices[i]);
+            float distanceFromPlayer = (worldSpaceVertPos - gameObject.transform.position).magnitude;
             colors[i] = Color.red;
-            if (distanceFromPlayer>2) {
+            if (distanceFromPlayer<10) {
                 colors[i] = Color.red;
                 Debug.Log("new color");
             }
