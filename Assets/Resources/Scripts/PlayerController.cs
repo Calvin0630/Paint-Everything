@@ -16,7 +16,10 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+<<<<<<< HEAD:Assets/Resources/Scripts/PlayerController.cs
         //Debug.Log(isOnGround());
+=======
+>>>>>>> origin:Assets/PlayerController.cs
         if (isOnGround()) {
             float xSpeed = Input.GetAxis("Horizontal "+playerID);
             float ySpeed = Input.GetAxis("Vertical " +playerID);
