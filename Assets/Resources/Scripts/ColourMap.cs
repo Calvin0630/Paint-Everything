@@ -21,19 +21,10 @@ public class ColourMap : MonoBehaviour {
         vertColors = new Color[vertices.Length];
         //set the default color of the map
         for (int i=0;i<vertColors.Length;i++) {
-            vertColors[i] = Color.clear;
+            vertColors[i] = Color.white;
         }
         mapMesh.colors = vertColors;
-        /*
-        // create new colors array where the colors will be created.
-        Color[] colors = new Color[vertices.Length];
-
-        for (int i = 0; i < vertices.Length; i++)
-            colors[i] = Color.red;
-
-        // assign the array of colors to the mapMesh.
-        mapMesh.colors = colors;
-        */ 
+        
         float max = 0;
         float min = 1024;
         for (int i = 0; i < vertices.Length; i++) {
