@@ -9,6 +9,7 @@ public class ColourMap : MonoBehaviour {
     Vector3[] vertices;
     //vertColors has the same size as vertices. colors map onto verts by index.
     Color[] vertColors;
+    public Color defaultColor;
     // Use this for initialization
     void Start () {
         mapMesh = gameObject.GetComponent<MeshFilter>().mesh;
@@ -21,22 +22,28 @@ public class ColourMap : MonoBehaviour {
         vertColors = new Color[vertices.Length];
         //set the default color of the map
         for (int i=0;i<vertColors.Length;i++) {
-            vertColors[i] = Color.white;
+            vertColors[i] = defaultColor;
         }
         mapMesh.colors = vertColors;
         
-        float max = 0;
-        float min = 1024;
+        float maxX = 0;
+        float minX = Mathf.Infinity;
+        float maxZ = 0;
+        float minZ = Mathf.Infinity;
         for (int i = 0; i < vertices.Length; i++) {
             //vertices[i] is in model space. so it must be converted to world space
             Vector3 worldSpaceVertPos = gameObject.transform.TransformPoint(vertices[i]);
             float mag = (players[0].transform.position - worldSpaceVertPos).magnitude;
+            float x = worldSpaceVertPos.x;
+            float z = worldSpaceVertPos.z;
             //float mag = worldSpaceVertPos.x;
-            if (mag > max) max = mag;
-            if (mag < min) min = mag;
+            if (x > maxX) maxX = x;
+            if (x < minX) minX = x;
+            if (z > maxZ) maxZ = z;
+            if (z < minZ) minZ = z;
         }
-        Debug.Log("Max: " + max);
-        Debug.Log("Min: " + min);
+        Debug.Log("The bound of the map are: ("+minX+", "+minZ+") to ("+maxX+", "+maxZ+")");
+        Debug.Log("the dimensions are" + (maxX - minX) + " by " + (maxZ - minZ));
 
     }
 

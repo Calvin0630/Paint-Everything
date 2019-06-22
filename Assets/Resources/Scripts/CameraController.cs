@@ -30,7 +30,7 @@ public class CameraController : MonoBehaviour {
             }
         }
         //Debug.Log("Player: " + (farthestPlayerIndex + 1) + " is the farthest from the average");
-        cameraDist = Mathf.Max(10, farthestPlayerDist * 2);
+        cameraDist = Mathf.Max(10, farthestPlayerDist * 2.2f);
 
         transform.position = targetAverage + offset*cameraDist;
         transform.LookAt(targetAverage);
