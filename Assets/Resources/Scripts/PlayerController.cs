@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
     public float ballSpeed;
-    public float boost;
+    float boost;
     //an int that represents the player number [1-4]
     public int playerID;
     Rigidbody body;
@@ -17,21 +17,20 @@ public class PlayerController : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
         //Debug.Log(isOnGround());
         if (isOnGround()) {
             float xSpeed = Input.GetAxis("Horizontal "+playerID);
             float ySpeed = Input.GetAxis("Vertical " +playerID);
             //check if player is pressing the boost button, if it is, add boost, otherwise no boost
             if (Input.GetButton("Boost " + playerID)) {
-                Debug.Log("Boosting");
+                //Debug.Log("Boosting");
                 boost = 1.5f;
             }
             else {
                 boost = 1f;
             }
-            //Debug.Log(boost);
-            //body.AddTorque(new Vector3(xSpeed, 0, ySpeed) * ballSpeed * Time.deltaTime);
+            //Debug.Log("boost factor: "+boost);
             body.AddForce(new Vector3(xSpeed, 0, ySpeed) * ballSpeed * boost);
             //check if player is pressing the jump button
             if (Input.GetButtonDown("Jump " + playerID)) {
