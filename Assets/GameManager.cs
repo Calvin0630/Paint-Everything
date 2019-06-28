@@ -8,8 +8,14 @@ public class GameManager : MonoBehaviour
     //hom long the round will be in seconds
     public int roundDuration;
     public Text clock;
+    public Text[] playerGameOverScoreText;
+    GameObject[] players;
+    public GameObject mapMesh;
+    public GameObject gameOverPanel;
     // Start is called before the first frame update
     void Start() {
+        Debug.Log("start");
+        players = Camera.main.GetComponent<CameraController>().targets;
         StartCoroutine(UpdateClock());
     }
 
@@ -33,6 +39,18 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
         clock.text = "GAMEOVER";
-        UpdateClock();
+        GameOver();
+    }
+
+    void GameOver() {
+        int[] scores = mapMesh.GetComponent<ColourMap>().scores;
+        int sum = 0;
+        for(int i=0;i<scores.Length;i++) {
+            sum += scores[i];
+        }
+        for (int i=0;i<playerGameOverScoreText.Length;i++) {
+            playerGameOverScoreText[i].text = Mathf.Round((float)100*scores[i]/sum)+"%";
+        }
+        gameOverPanel.SetActive(true);
     }
 }

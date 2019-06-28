@@ -7,7 +7,7 @@ public class ColourMap : MonoBehaviour {
     GameObject[] players;
     Color[] playerColors;
     //scores counts the number of vertices that each of the players have paintes. the size of scores is the number of players in the game.
-    int[] scores;
+    public int[] scores;
     public Image[] playerScoreBars;
     Mesh mapMesh;
     Vector3[] vertices;
