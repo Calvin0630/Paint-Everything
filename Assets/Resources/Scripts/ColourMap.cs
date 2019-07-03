@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class ColourMap : MonoBehaviour {
     GameObject[] players;
@@ -16,6 +17,7 @@ public class ColourMap : MonoBehaviour {
     public Color defaultColor;
     float dimX;
     float dimZ;
+    Vector3 mapCenter;
     //the number of zones in the X direction
     int zoneCountX;
     //the difference in position between zones in the X direction
@@ -48,9 +50,9 @@ public class ColourMap : MonoBehaviour {
         }
         mapMesh.colors = vertColors;
         //get the dimensions of the map
-        float maxX = 0;
+        float maxX = Mathf.NegativeInfinity;
         float minX = Mathf.Infinity;
-        float maxZ = 0;
+        float maxZ = Mathf.NegativeInfinity;
         float minZ = Mathf.Infinity;
         for (int i = 0; i < vertices.Length; i++) {
             //vertices[i] is in model space. so it must be converted to world space
@@ -63,22 +65,28 @@ public class ColourMap : MonoBehaviour {
             if (z < minZ) minZ = z;
         }
         Debug.Log("The bound of the map are: (" + minX + ", " + minZ + ") to (" + maxX + ", " + maxZ + ")");
-        dimX = Mathf.Round(maxX - minX);
-        dimZ = Mathf.Round(maxZ - minZ);
+        mapCenter = new Vector3((maxX + minX)/2, 0, (maxZ + minZ)/2);
+        //center the mesh in world space
+        gameObject.transform.parent.transform.position = -mapCenter;
+        dimX = maxX - minX;
+        dimZ = maxZ - minZ;
+        Debug.Log("The center of the map is at: " + mapCenter);
         Debug.Log("the dimensions are " + dimX + " by " + dimZ);
         //initialize the zones
-        zoneCountX = (int)(dimX / (zoneSize / 2)) + 1;
+        zoneCountX = (int)(Mathf.Round(dimX) / (zoneSize/2))+1;
         zoneDeltaX = dimX / (zoneCountX - 1);
-        zoneCountZ = (int)(dimZ / (zoneSize / 2)) + 1;
+        zoneDeltaX = Mathf.Round(zoneDeltaX);
+        zoneCountZ = (int)(Mathf.Round(dimZ) / (zoneSize / 2))+1;
         zoneDeltaZ = dimZ / (zoneCountZ - 1);
+        zoneDeltaZ = Mathf.Round(zoneDeltaZ);
         Debug.Log("There will be " + zoneCountX + " zones in the X direction, and " + zoneCountZ + " zones in the Z direction");
         Debug.Log("the zones are spaced out by x: " + zoneDeltaX + " and z: " + zoneDeltaZ);
         //zonePositions start in -x, -z corner and move along the Z axis in rows
         Vector3[] zonePositions = new Vector3[zoneCountX * zoneCountZ];
         for (int i = 0; i < zoneCountX; i++) {
             for (int j = 0; j < zoneCountZ; j++) {
-                zonePositions[(i * zoneCountX) + j] = gameObject.transform.position + new Vector3((i * zoneDeltaX) - dimX / 2, 0, (j * zoneDeltaZ) - dimZ / 2);
-                //Debug.Log("zonePosition[" + ((i * zoneCountZ) + j) + "]: " + zonePositions[(i * zoneCountX) + j]);
+                zonePositions[(i * zoneCountX) + j] = new Vector3((i * zoneDeltaX) - (zoneDeltaX*((zoneCountX-1)/2)), 0, (j * zoneDeltaZ) - (zoneDeltaZ * ((zoneCountZ - 1) / 2)));
+                Debug.Log("zonePosition[" + ((i * zoneCountZ) + j) + "]: " + zonePositions[(i * zoneCountX) + j]);
             }
         }
         //initialize zones
@@ -95,8 +103,9 @@ public class ColourMap : MonoBehaviour {
             }
             //assign the zone position to the entry in the dictionary
             zones[zonePositions[i]] = vertIndices.ToArray();
-            //Debug.Log("zone: " + i + " size: " + vertIndices.Count);
+            Debug.Log("zone: " + i + " size: " + vertIndices.Count);
         }
+        EditorApplication.isPaused = true;
     }
 
     // Update is called once per frame
@@ -158,13 +167,9 @@ public class ColourMap : MonoBehaviour {
             Debug.Log("v is out of the bounds of the map");
             return Vector3.negativeInfinity;
         }
-        //go to model space
-        v = v - gameObject.transform.position;
         //round v to the nearest 
-        v = new Vector3(Mathf.Round(v.x / zoneDeltaX) * zoneDeltaX, gameObject.transform.position.y, Mathf.Round(v.z / zoneDeltaZ) * zoneDeltaZ);
-        //go back to world space
-        v = v + gameObject.transform.position;
-        //Debug.Log("zonePos: " + v);
+        v = new Vector3(Mathf.Round(v.x / zoneDeltaX) * zoneDeltaX, 0, Mathf.Round(v.z / zoneDeltaZ) * zoneDeltaZ);
+        Debug.Log("zonePos: " + v);
         return v;
     }
     /*
