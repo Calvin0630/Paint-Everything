@@ -33,6 +33,8 @@ public class ColourMap : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        //add the ground tag to the object so players can tell if theyre on the ground
+        gameObject.tag = "Ground";
         mapMesh = gameObject.GetComponent<MeshFilter>().mesh;
         players = Camera.main.GetComponent<CameraController>().targets;
         scores = new int[players.Length];
@@ -70,8 +72,8 @@ public class ColourMap : MonoBehaviour {
         gameObject.transform.parent.transform.position = -mapCenter;
         dimX = maxX - minX;
         dimZ = maxZ - minZ;
-        Debug.Log("The center of the map is at: " + mapCenter);
-        Debug.Log("the dimensions are " + dimX + " by " + dimZ);
+        //Debug.Log("The center of the map is at: " + mapCenter);
+        //Debug.Log("the dimensions are " + dimX + " by " + dimZ);
         //initialize the zones
         zoneCountX = (int)(Mathf.Round(dimX) / (zoneSize/2))+1;
         zoneDeltaX = dimX / (zoneCountX - 1);
@@ -79,14 +81,14 @@ public class ColourMap : MonoBehaviour {
         zoneCountZ = (int)(Mathf.Round(dimZ) / (zoneSize / 2))+1;
         zoneDeltaZ = dimZ / (zoneCountZ - 1);
         zoneDeltaZ = Mathf.Round(zoneDeltaZ);
-        Debug.Log("There will be " + zoneCountX + " zones in the X direction, and " + zoneCountZ + " zones in the Z direction");
-        Debug.Log("the zones are spaced out by x: " + zoneDeltaX + " and z: " + zoneDeltaZ);
+        //Debug.Log("There will be " + zoneCountX + " zones in the X direction, and " + zoneCountZ + " zones in the Z direction");
+        //Debug.Log("the zones are spaced out by x: " + zoneDeltaX + " and z: " + zoneDeltaZ);
         //zonePositions start in -x, -z corner and move along the Z axis in rows
         Vector3[] zonePositions = new Vector3[zoneCountX * zoneCountZ];
         for (int i = 0; i < zoneCountX; i++) {
             for (int j = 0; j < zoneCountZ; j++) {
                 zonePositions[(i * zoneCountX) + j] = new Vector3((i * zoneDeltaX) - (zoneDeltaX*((zoneCountX-1)/2)), 0, (j * zoneDeltaZ) - (zoneDeltaZ * ((zoneCountZ - 1) / 2)));
-                Debug.Log("zonePosition[" + ((i * zoneCountZ) + j) + "]: " + zonePositions[(i * zoneCountX) + j]);
+                //Debug.Log("zonePosition[" + ((i * zoneCountZ) + j) + "]: " + zonePositions[(i * zoneCountX) + j]);
             }
         }
         //initialize zones
@@ -103,9 +105,9 @@ public class ColourMap : MonoBehaviour {
             }
             //assign the zone position to the entry in the dictionary
             zones[zonePositions[i]] = vertIndices.ToArray();
-            Debug.Log("zone: " + i + " size: " + vertIndices.Count);
+            //Debug.Log("zone: " + i + " size: " + vertIndices.Count);
         }
-        EditorApplication.isPaused = true;
+        //EditorApplication.isPaused = true;
     }
 
     // Update is called once per frame
@@ -169,7 +171,7 @@ public class ColourMap : MonoBehaviour {
         }
         //round v to the nearest 
         v = new Vector3(Mathf.Round(v.x / zoneDeltaX) * zoneDeltaX, 0, Mathf.Round(v.z / zoneDeltaZ) * zoneDeltaZ);
-        Debug.Log("zonePos: " + v);
+        //Debug.Log("zonePos: " + v);
         return v;
     }
     /*
