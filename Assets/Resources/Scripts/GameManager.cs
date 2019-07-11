@@ -14,7 +14,6 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverPanel;
     // Start is called before the first frame update
     void Start() {
-        Debug.Log("start");
         players = Camera.main.GetComponent<CameraController>().targets;
         StartCoroutine(UpdateClock());
     }

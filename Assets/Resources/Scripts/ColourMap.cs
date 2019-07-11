@@ -81,7 +81,7 @@ public class ColourMap : MonoBehaviour {
         zoneCountZ = (int)(Mathf.Round(dimZ) / (zoneSize / 2))+1;
         zoneDeltaZ = dimZ / (zoneCountZ - 1);
         zoneDeltaZ = Mathf.Round(zoneDeltaZ);
-        //Debug.Log("There will be " + zoneCountX + " zones in the X direction, and " + zoneCountZ + " zones in the Z direction");
+        Debug.Log("There will be " + zoneCountX + " zones in the X direction, and " + zoneCountZ + " zones in the Z direction");
         //Debug.Log("the zones are spaced out by x: " + zoneDeltaX + " and z: " + zoneDeltaZ);
         //zonePositions start in -x, -z corner and move along the Z axis in rows
         Vector3[] zonePositions = new Vector3[zoneCountX * zoneCountZ];
