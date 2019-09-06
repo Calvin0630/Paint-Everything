@@ -66,14 +66,14 @@ public class ColourMap : MonoBehaviour {
             if (z > maxZ) maxZ = z;
             if (z < minZ) minZ = z;
         }
-        Debug.Log("The bound of the map are: (" + minX + ", " + minZ + ") to (" + maxX + ", " + maxZ + ")");
+        //Debug.Log("The bound of the map are: (" + minX + ", " + minZ + ") to (" + maxX + ", " + maxZ + ")");
         mapCenter = new Vector3((maxX + minX)/2, 0, (maxZ + minZ)/2);
+        //Debug.Log("the center of the map is at " + mapCenter);
         //center the mesh in world space
-        gameObject.transform.parent.transform.position = -mapCenter;
         dimX = maxX - minX;
         dimZ = maxZ - minZ;
         //Debug.Log("The center of the map is at: " + mapCenter);
-        //Debug.Log("the dimensions are " + dimX + " by " + dimZ);
+        Debug.Log("the dimensions are " + dimX + " by " + dimZ);
         //initialize the zones
         zoneCountX = (int)(Mathf.Round(dimX) / (zoneSize/2))+1;
         zoneDeltaX = dimX / (zoneCountX - 1);
