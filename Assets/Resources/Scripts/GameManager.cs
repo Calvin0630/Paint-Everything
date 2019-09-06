@@ -52,4 +52,11 @@ public class GameManager : MonoBehaviour
         }
         gameOverPanel.SetActive(true);
     }
+
+    void LoadGame(int playerCount, Color[] playerColors, int mapID) {
+
+    }
+    void LoadMainMenu() {
+
+    } 
 }

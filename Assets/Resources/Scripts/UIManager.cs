@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public GameObject controlsPanel;
+    public GameObject playerSelect;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,10 +18,13 @@ public class UIManager : MonoBehaviour
     {
         
     }
-    public void Play() {
-        Debug.Log("GameObject.Find(PlayerSelect).gameObject == null: " + (GameObject.Find("PlayerSelect") == null));
-        GameObject.Find("PlayerSelect").gameObject.SetActive(true);
+    public void LoadPlayerSelect() {
+        playerSelect.SetActive(true);
         GameObject.Find("MainMenu").gameObject.SetActive(false);
+    }
+    //loads the game scene with the correct number of players and map
+    public void LoadGame(Color[] playerColors, int mapID) {
+
     }
     public void Exit() {
         Application.Quit();

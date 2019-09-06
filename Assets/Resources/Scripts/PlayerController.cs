@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour {
             body.AddForce(new Vector3(xSpeed, 0, ySpeed) * ballSpeed * boost);
             //check if player is pressing the jump button
             if (Input.GetButtonDown("Jump " + playerID)) {
+                Debug.Log("Jump "+playerID);
                 jump();
             }
         }
